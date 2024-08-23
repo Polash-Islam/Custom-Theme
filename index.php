@@ -1,28 +1,46 @@
-<?php 
+<?php
 /*
-this template for displaying the header
+* The main template file
 */ 
+get_header(); ?>
 
-?>
-
-<!DOCTYPE html>
-<html lang="<?php language_attributes(  ); ?>" class="no-js">
-<head>
-    <meta charset="<?php  bloginfo( 'charset' )?>">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <?php wp_head(); ?>
-</head>
-<body <?php body_class() ?>>
- <div id="header_are">
+<section id="body_area">
     <div class="container">
         <div class="row">
+            <div class="col-md-9">
+                <?php if (have_posts()) :
+                    while (have_posts()) : the_post(); ?>
+
+                    <div class="blog_area">
+                        <div class="post_thumb">
+                            <a href="<?php the_permalink(); ?>"><?php echo the_post_thumbnail('post-thumbnails'); ?></a>
+                        </div>
+                        <div class="post_details">
+                            <h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
+                            <?php the_excerpt(); ?>
+                        </div>
+                    </div>
+                <?php endwhile;
+                else :
+                    _e('No post found');
+                endif; ?>
+                
+                <div id="page_nav">
+                    <?php 
+                    if (function_exists('pagenav')) {
+                        pagenav(); 
+                    } else { 
+                        next_posts_link('Older Posts');
+                        previous_posts_link('Newer Posts');
+                    } 
+                    ?>
+                </div>
+            </div>
             <div class="col-md-3">
-            <a href=""><img src="<?php echo get_theme_mod('Polash_logo'); ?>" alt=""></a>
-            
+                <h2>This is sidebar area</h2>
             </div>
         </div>
     </div>
- </div>
-<?php wp_footer(); ?>
-</body>
-</html>
+</section>
+
+<?php get_footer(); ?>
